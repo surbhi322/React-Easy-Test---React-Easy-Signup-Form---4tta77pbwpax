@@ -3,90 +3,63 @@ import "../styles/App.css";
 import { signUpFormValidation } from "../utils/validation";
 
 const App = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [consent, setConsent] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [error, setError] = useState({ name: "", email: "", password: "" });
+
+  const validate = (event) => {
+    event.preventDefault();
+
+    const errors = signUpFormValidation({
+      email: event.target.email.value,
+      password: event.target.password.value,
+      name: event.target.name.value,
+    });
+    if (errors == null) {
+      setError({ name: "", email: "", password: "" });
+    } else {
+      setError(errors);
+    }
+  };
+
   return (
     <>
-      <form
-        onSubmit={(e) => {
-          // console.log(name);
-          let obj = {
-            name: name,
-            email: email,
-            password: password,
-            consent: consent
-          };
-
-          e.preventDefault();
-          setErrors(signUpFormValidation(obj));
-          //console.log(errors);
-        }}
-      >
+      <form onSubmit={validate}>
         <div>
           <label>
-            Name
-            <input
-              type="text"
-              id="name"
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-            ></input>
+            Name :
+            <input id="name" type="text" name="name" />
           </label>
-          <p>{errors.name ? errors.name : null}</p>
+          {error.name != null && error.name != "" ? error.name : null}
         </div>
+        <br />
         <div>
           <label>
-            Email
-            <input
-              type="text"
-              value={email}
-              id="email"
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-            ></input>
+            Email :
+            <input id="email" type="text" name="email" />
           </label>
-          <p>{errors.email ? errors.email : null}</p>
+          {error.email != null && error.email != "" ? error.email : null}
         </div>
+        <br />
         <div>
           <label>
-            Password
-            <input
-              type="PassWord"
-              id="password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-            ></input>
+            Password :
+            <input id="password" type="text" name="password" />
           </label>
-          <p>{errors.password ? errors.password : null}</p>
+          {error.password != null && error.password != ""
+            ? error.password
+            : null}
         </div>
+        <br />
         <div>
           <label>
-            Consent
-            <input
-              type="checkbox"
-              id="consent"
-              onChange={() => {
-                setConsent(!consent);
-              }}
-            ></input>
+            Consent :
+            <input id="consent" type="checkbox" name="consent" />
           </label>
-          {/* <p>{!consent ? "Checkbox not selected" : null}</p> */}
         </div>
-        <button type="submit">SignUp</button>
+        <br />
+        <div>
+          <button type="submit">Signup</button>
+        </div>
       </form>
-      <p>
-        {!name && !email && !password && !consent
-          ? "All Feilds are Empty"
-          : null}
-      </p>
     </>
   );
 };
